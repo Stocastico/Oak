@@ -46,6 +46,24 @@ def getMonoCamera(pipeline, isLeft, resolution=400):
   return mono
 
 
+def getStereoPair(pipeline, monoLeft, monoRight):
+  """
+  Generates a stereo node. Takes left and right camera streams as inputs and generates outputs
+  """
+  stereo = pipeline.createStereoDepth()
+  stereo.setLeftRightCheck(True)
+  monoLeft.out.link(stereo.left)
+  monoRight.out.link(stereo.right)
+  return stereo
+
+
+def mouseCallback(event, x, y, flags, param):
+  global mouseX, mouseY
+  if event == cv2.EVENT_LBUTTONDOWN:
+    mouseX = x
+    mouseY = y
+
+
 if __name__ == '__main__':
   
   pipeline = dai.Pipeline()
